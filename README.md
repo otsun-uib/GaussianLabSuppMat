@@ -1,5 +1,4 @@
-# Supplementary Material for manuscript  
-"Decoding Solar Flux Patterns: A Multi-Gaussian Framework for Modeling Flux Distributions in Parabolic Trough Collectors."
+# Supplementary Material for manuscript "Decoding Solar Flux Patterns: A Multi-Gaussian Framework for Modeling Flux Distributions in Parabolic Trough Collectors"
 
 ## By Sainath A. Waghmare, Gabriel Cardona, and Ramón Pujol-Nadal**
 
@@ -66,14 +65,8 @@ The WebPlotDigitizer tool (https://automeris.io/) is used to extract results fro
 
 # References
 
-- **Rodriguez-Sanchez, D.; Rosengarten, G.**  
-  *Optical efficiency of parabolic troughs with a secondary flat reflector; effects of non-ideal primary mirrors.*  
-  Energy 288 (2024) 129521.
+- **Rodriguez-Sanchez, D.; Rosengarten, G.**  *Optical efficiency of parabolic troughs with a secondary flat reflector; effects of non-ideal primary mirrors.*  Energy 288 (2024) 129521.
 
-- **Altarawneh, I.; Batiha, M.; Rawadieh, S.; Alnaief, M.; Tarawneh, M.**  
-  *Solar desalination under concentrated solar flux and reduced pressure conditions.*  
-  Solar Energy 206 (2020) 983–996.
+- **Altarawneh, I.; Batiha, M.; Rawadieh, S.; Alnaief, M.; Tarawneh, M.**  *Solar desalination under concentrated solar flux and reduced pressure conditions.*  Solar Energy 206 (2020) 983–996.
 
-- **Jeter, S. M.**  
-  *Calculation of the concentrated flux density distribution in parabolic trough collectors by a semifinite formulation.*  
-  Solar Energy 37(5) (1986) 335–345.
+- **Jeter, S. M.**  *Calculation of the concentrated flux density distribution in parabolic trough collectors by a semifinite formulation.*    Solar Energy 37(5) (1986) 335–345.
