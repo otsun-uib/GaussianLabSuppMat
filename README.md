@@ -1,4 +1,4 @@
-# Supplementary Material for manuscript "Decoding Solar Flux Patterns: A Multi-Gaussian Framework for Modeling Flux Distributions in Parabolic Trough Collectors"
+# Supplementary Material for manuscript "Characterization of Circumferential Flux Distributions in Parabolic Trough Receivers Using Adaptive Gaussian Representations"
 
 ## By Sainath A. Waghmare, Gabriel Cardona, and Ramón Pujol-Nadal**
 
@@ -27,7 +27,7 @@ Folders:
 
 - **`No_of_Rays_Simulation`** — Output of the simulation for number of rays  
 - **`CSR_Vary`** — Output of the simulation for varying CSR values  
-- **`Constant_material_Validation`** — Output of the simulation with wavelength-independent material  
+- **`Constant_material_Validation`** — Output of the simulation for a wavelength-independent material  
 - **`Variable_material_Validation`** — Output of the simulation for a wavelength-dependent material  
 - **`Receiver_Diameter`** — Output of the simulation for varying receiver diameter  
 - **`Receiver_Height`** — Output of the simulation for varying receiver height  
@@ -38,17 +38,17 @@ Folders:
 ### 3. `Flux_Distribution_Results`
 Folder containing Python code for the Gaussian curve fitting algorithm and results files (receiver circumferential angle vs LCR) obtained from `Flux_Distribution_code` and OTSun output files. *“5 Result and discussion”*
 
-- **`Gaussian_Curve_Fitting_Algorithm.py`**: Script used to generate Gaussian curves for receiver circumferential angle vs LCR results. The inputs are flux distribution results. *“Figure 4”*
+- **`Gaussian_Characterization_Algorithm`**: Script used to generate Gaussian curves for receiver circumferential angle vs LCR results. The inputs are flux distribution results. *“Figures 3 and 4”*
 
 Data files:
 
-- **`P_No_of_Rays.csv`** — Data to generate Figure 6  
-- **`P_CSR_vary.csv`** — Data to generate Figure 8  
-- **`P_Constant_Material_PTC.csv`** — Data to generate Figure 9  
-- **`P_Variable_Material_PTC.csv`** — Data to generate Figure 10  
-- **`P_Variable_Receiver_Diameter_LCR.csv`** — Data to generate Figure 11  
-- **`P_Variable_Receiver_Height_LCR`** — Data to generate Figures 12 & 13  
-- **`P_Variable_Rim_Angle_LCR.csv`** — Data to generate Figures 14 & 15  
+- **`P_No_of_Rays.csv`** — Data to generate Figure 5  
+- **`P_CSR_vary.csv`** — Data to generate Figure 7  
+- **`P_Constant_Material_PTC.csv`** — Data to generate Figure 8(a)  
+- **`P_Variable_Material_PTC.csv`** — Data to generate Figure 8(b)  
+- **`P_Variable_Receiver_Diameter_LCR.csv`** — Data to generate Figure 9  
+- **`P_Variable_Receiver_Height_LCR`** — Data to generate Figures 10(a) & 10(b)  
+- **`P_Variable_Rim_Angle_LCR.csv`** — Data to generate Figures 11(a) & 11(b)  
 
 ---
 
@@ -56,10 +56,17 @@ Data files:
 Folder containing files related to data from previous researchers for validation.  
 The WebPlotDigitizer tool (https://automeris.io/) is used to extract results from already published literature.
 
-- **`Altarawneh_et_al_Point_Source.csv`** — Data taken from Altarawneh et al., 2020, for validation in Figure 9  
-- **`Altarawneh_et_al_Sun_Shape.csv`** — Data taken from Altarawneh et al., 2020, for validation in Figure 9  
-- **`Jeter_et_al_Data_Sun_Shape.csv`** — Data taken from Jeter et al., 1986, for validation in Figure 9  
-- **`Rodriguez-Sanchez_and_Rosengarten.csv`** — Data taken from Rodriguez-Sanchez and Rosengarten., 2024, for validation in Figure 10  
+- **`Altarawneh_et_al_Point_Source.csv`** — Data taken from Altarawneh et al., 2020, for validation in Figure 8(a)  
+- **`Altarawneh_et_al_Sun_Shape.csv`** — Data taken from Altarawneh et al., 2020, for validation in Figure 8(a)  
+- **`Jeter_et_al_Data_Sun_Shape.csv`** — Data taken from Jeter et al., 1986, for validation in Figures 3, 4, 6, and 8(a)  
+- **`Rodriguez-Sanchez_and_Rosengarten.csv`** — Data taken from Rodriguez-Sanchez and Rosengarten., 2024, for validation in Figure 8(b) 
+
+## 5. `Supplementary_Material`
+Folder containing files of supplementary information and values of k (Gaussian parameters)
+
+- **`Supplementary_Information.pdf`**: Figure S1 for spectral irradiance modelling using ASTM G173-03. Tables S1 and S2 for statistical indicator values for Jeter's curve at 0◦ incidence angle.
+- **`Parameter_Values.xlsx`**: Gaussian parameters, k used in this characterization study to generate Figures: 6, 7, 8, 9, 10 and 11. 
+
 
 ---
 
