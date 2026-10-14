@@ -1,11 +1,10 @@
+
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jul 14 18:15:49 2025
-
 @author: SAINATH
 """
 
-# -*- coding: utf-8 -*-
+
 """
 Adaptive Piecewise Gaussian Fitting with Expanded Kernel Library
   – Automatic Δflux split in θ∈[0,30]°
@@ -25,16 +24,17 @@ from scipy.stats import skewnorm
 from sklearn.model_selection import KFold
 import warnings
 
+
 # 1) Load data
-df     = pd.read_csv("Jeter_Data_1.csv")
-theta  = df["0_theta"].values
+df     = pd.read_csv("C:/...../Data_From_Literature/Jeter_et_al_Data_Sun_Shape.csv") # give exact path
+theta  = df["0_Angle"].values
 flux   = df["0_LCR"].values
 N      = len(theta)
 
 # 2) Set split-angle manually or automatically
 
-split_ang = 22.5 #manually
-"""
+split_ang = 17.5 #manually
+'''
 #Detect split‐angle by Δflux in [0°,30°]
 mask30    = (theta >= 0) & (theta <= 30)
 idx30     = np.where(mask30)[0]
@@ -42,9 +42,10 @@ flux30    = flux[idx30]
 dflux30   = np.diff(flux30)
 split_j   = idx30[np.argmax(np.abs(dflux30)) + 1]
 split_ang = theta[split_j]
+print(f"Split at θ = {split_ang:.4f}° (auto set)")
+'''
 
-"""
-print(f"Split at θ = {split_ang:.4f}° (index {split_j})")
+print(f"Split at θ = {split_ang:.4f}° (manually set)")
 
 
 # 3) Partition regions
@@ -89,7 +90,7 @@ def trunc_gauss(x, A, mu, s, r):
     return np.where(np.abs(x-mu)<=r*s, y, 0)
 
 def folded_gauss(x, A, mu, s):
-    return A * np.exp(-((np.abs(x-mu))**2)/(2*s**2))
+    return A * np.exp(-((x-mu)**2)/(2*s**2)) * (x >= 0)
 
 def split_gauss(x, A, mu, sl, sr):
     y = np.empty_like(x)
@@ -129,7 +130,7 @@ def metrics(y, yhat, k):
 
 # 6) Initial guesses
 def initial_guess(name, x, y):
-    span = x.ptp() or 1
+    span = np.ptp(x) or 1
     peak = x[np.argmax(y)]
     if name=="Gaussian":
         return [y.max(), peak, span/4]
@@ -159,30 +160,63 @@ def initial_guess(name, x, y):
         return [y.max(), peak, span/6, span/6]
     return None
 
+def physically_plausible(name, popt, lo=0.0, hi=180.0):
+    if name in ("GMM3", "GMM4", "TwinGauss", "DoG"):
+        P = np.asarray(popt).reshape(-1, 3)
+        mu, s = P[:, 1], np.abs(P[:, 2])
+        w = hi - lo
+        return bool(np.all((mu >= lo - w) & (mu <= hi + w)) and np.all(s <= w))
+    return True
+
 # 7) Fit each region
-def fit_region(x, y):
-    best = None
-    for name,(fn,k) in candidates.items():
-        if k > len(x): 
+def fit_region_full(x, y, region_label="", quiet=False):
+    rows, best = [], None
+    for name, (fn, k) in candidates.items():
+        if k > len(x):
             continue
         p0 = initial_guess(name, x, y)
         try:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                popt,_ = curve_fit(fn, x, y, p0=p0, maxfev=20000)
+                popt, pcov = curve_fit(fn, x, y, p0=p0, maxfev=20000)
             yhat = fn(x, *popt)
-            r2,rmse,mae,ssr,aic,aicc,bic = metrics(y, yhat, len(popt))
-            cand = {"name":name,"popt":popt,
-                    "r2":r2,"rmse":rmse,"mae":mae,
-                    "ssr":ssr,"aic":aic,"aicc":aicc,"bic":bic}
-            if best is None or cand["aic"] < best["aic"]:
-                best = cand
-        except:
-            continue
-    return best
+            r2, rmse, mae, ssr, aic, aicc, bic = metrics(y, yhat, len(popt))
 
-res1 = fit_region(x1, y1)
-res2 = fit_region(x2, y2)
+            cov_ok = bool(np.all(np.isfinite(pcov)))
+            rel_se = (np.nanmax(np.sqrt(np.abs(np.diag(pcov))) / (np.abs(popt) + 1e-12))
+                      if cov_ok else np.nan)
+            plausible = physically_plausible(name, popt)
+            saturated = len(x) <= len(popt) + 1
+
+            rows.append({"Model": name, "R2": r2, "RMSE": rmse, "MAE": mae,
+                         "SSR": ssr, "AIC": aic, "AICc": aicc, "BIC": bic,
+                         "CovOK": cov_ok, "MaxRelSE": rel_se,
+                         "Plausible": plausible, "Saturated": saturated})
+
+            cand = {"name": name, "popt": popt, "r2": r2, "rmse": rmse, "mae": mae,
+                    "ssr": ssr, "aic": aic, "aicc": aicc, "bic": bic}
+            if plausible and (best is None or cand["aic"] < best["aic"]):
+                best = cand
+        except Exception:
+            continue
+
+    df = pd.DataFrame(rows).round(4)
+    if not quiet:
+        print(f"\n## {region_label}: All Candidate Metrics\n")
+        print(df.to_markdown(index=False))
+    return best, df
+
+
+res1, table1 = fit_region_full(x1, y1, region_label="Region 1")
+res2, table2 = fit_region_full(x2, y2, region_label="Region 2")
+
+for res, x, y in [(res1, x1, y1), (res2, x2, y2)]:
+    fn = candidates[res["name"]][0]
+    popt, pcov = curve_fit(fn, x, y, p0=res["popt"], maxfev=20000)
+    se = np.sqrt(np.diag(pcov)) if np.all(np.isfinite(pcov)) else None
+    print(res["name"], "params:", np.round(popt, 3))
+    print("  std errors:", None if se is None else np.round(se, 3))
+
 
 # 8) Evaluate fits & stitch
 y1_fit = candidates[res1["name"]][0](x1, *res1["popt"])
@@ -212,11 +246,18 @@ y_pred = np.empty_like(flux)
 y_pred[mask1] = y1_fit
 y_pred[mask2] = y2_fit
 
+resid = flux - y_pred
+plt.figure(figsize=(8,3.5))
+plt.axhline(0, color='k', lw=0.8); plt.axvline(split_ang, color='gray', ls='--')
+plt.plot(theta, resid, 'o-', ms=4)
+plt.xlabel("Receiver circumferential angle (°)"); plt.ylabel("Residual (LCR)")
+plt.tight_layout(); plt.savefig("Residuals_Jeter_0deg.png", dpi=300); plt.show()
+
 # Compute global
 r2_all, rmse_all, mae_all, ssr_all, aic_all, aicc_all, bic_all = \
     metrics(flux, y_pred, len(res1["popt"])+len(res2["popt"]))
 
-# CV‐RMSE & CV‐MAE (naïve on fitted curve)
+# CV‐RMSE & CV‐MAE 
 kf      = KFold(n_splits=5, shuffle=True, random_state=0)
 errs_rmse, errs_mae = [], []
 for _,test in kf.split(theta):
@@ -236,6 +277,22 @@ plt.ylabel("Flux")
 plt.title(f"{res1['name']}→{res2['name']} | R²={r2_all:.4f}, RMSE={rmse_all:.4f}")
 plt.legend(); plt.grid(alpha=0.3); plt.tight_layout()
 plt.show()
+
+rows = []
+for sp in [12.53, 15, 17.5, 20, 22.5, 25, 27.5, 30, 37.5, 45, 67.5]:
+    m1, m2 = theta <= sp, theta > sp
+    r1, _ = fit_region_full(theta[m1], flux[m1], quiet=True)
+    r2, _ = fit_region_full(theta[m2], flux[m2], quiet=True)
+    if r1 is None or r2 is None:
+        continue
+    yp = np.empty_like(flux)
+    yp[m1] = candidates[r1["name"]][0](theta[m1], *r1["popt"])
+    yp[m2] = candidates[r2["name"]][0](theta[m2], *r2["popt"])
+    k = len(r1["popt"]) + len(r2["popt"])
+    R2, RM, MA, SS, AI, AC, BI = metrics(flux, yp, k)
+    rows.append({"split": sp, "n1": int(m1.sum()), "Region1": r1["name"],
+                 "Region2": r2["name"], "k": k, "R2": R2, "RMSE": RM, "AIC": AI, "BIC": BI})
+print(pd.DataFrame(rows).round(4).to_markdown(index=False))
 
 # 11) Summary
 print("Region1:", res1["name"], "params:", np.round(res1["popt"],4))

@@ -1,6 +1,6 @@
-# Supplementary Material for manuscript "Characterization of Circumferential Flux Distributions in Parabolic Trough Receivers Using Adaptive Gaussian Representations"
+# Supplementary Material for manuscript: "Characterization of Circumferential Flux Distributions in Parabolic Trough Receivers Using Adaptive Gaussian Representations"
 
-## By Sainath A. Waghmare, Gabriel Cardona, and Ramón Pujol-Nadal**
+## By Sainath A. Waghmare, Gabriel Cardona, and Ramón Pujol-Nadal
 
 # Contents of the repository
 
@@ -33,12 +33,14 @@ Folders:
 - **`Receiver_Height`** — Output of the simulation for varying receiver height  
 - **`Rim_Angle`** — Output of the simulation for variable rim angles  
 
+Data for Variable Theta will be made available upon request.
+
 ---
 
 ### 3. `Flux_Distribution_Results`
-Folder containing Python code for the Gaussian curve fitting algorithm and results files (receiver circumferential angle vs LCR) obtained from `Flux_Distribution_code` and OTSun output files. *“5 Result and discussion”*
+Folder containing Python code for the automated Gaussian characterization algorithm and results files (receiver circumferential angle vs LCR) obtained from `Flux_Distribution_code` and OTSun output files. *“5 Result and discussion”*
 
-- **`Gaussian_Characterization_Algorithm`**: Script used to generate Gaussian curves for receiver circumferential angle vs LCR results. The inputs are flux distribution results. *“Figures 3 and 4”*
+- **`Gaussian_Characterization_Algorithm.py`**: Script used to generate Gaussian curves for receiver circumferential angle vs LCR results. The inputs are flux distribution results. *“Figures 3 and 4”*
 
 Data files:
 
@@ -49,6 +51,7 @@ Data files:
 - **`P_Variable_Receiver_Diameter_LCR.csv`** — Data to generate Figure 9  
 - **`P_Variable_Receiver_Height_LCR`** — Data to generate Figures 10(a) & 10(b)  
 - **`P_Variable_Rim_Angle_LCR.csv`** — Data to generate Figures 11(a) & 11(b)  
+- **`P_Variable_Theta.csv`** — Data to generate Figure 12  
 
 ---
 
@@ -64,7 +67,7 @@ The WebPlotDigitizer tool (https://automeris.io/) is used to extract results fro
 ## 5. `Supplementary_Material`
 Folder containing files of supplementary information and values of k (Gaussian parameters)
 
-- **`Supplementary_Information.pdf`**: Figure S1 for spectral irradiance modelling using ASTM G173-03. Tables S1 and S2 for statistical indicator values for Jeter's curve at 0◦ incidence angle.
+- **`Supplementary_Information.pdf`**: Figure S1 for spectral irradiance modelling using ASTM G173-03. Tables S1 and S2 for statistical indicator values for Jeter's curve at 0◦ incidence angle. Table S3 for parameters and standard error of fit. Table S4 for sensitivity analysis of the Gaussian fit. Table S5 shows the shadowing region and its relation with BL. Table S6 for Gaussian descriptors and their angular ranges for the curves plotted in this study.
 - **`Parameter_Values.xlsx`**: Gaussian parameters, k used in this characterization study to generate Figures: 6, 7, 8, 9, 10 and 11. 
 
 
@@ -72,8 +75,8 @@ Folder containing files of supplementary information and values of k (Gaussian p
 
 # References
 
-- **Rodriguez-Sanchez, D.; Rosengarten, G.**  *Optical efficiency of parabolic troughs with a secondary flat reflector; effects of non-ideal primary mirrors.*  Energy 288 (2024) 129521.
+- D. Rodriguez-Sanchez, G. Rosengarten, *Optical efficiency of parabolic troughs with a secondary flat reflector; effects of non-ideal primary mirrors*, Energy 288 (2024) 129521.
 
-- **Altarawneh, I.; Batiha, M.; Rawadieh, S.; Alnaief, M.; Tarawneh, M.**  *Solar desalination under concentrated solar flux and reduced pressure conditions.*  Solar Energy 206 (2020) 983–996.
+- I. Altarawneh, M. Batiha, S. Rawadieh, M. Alnaief, M. Tarawneh, *Solar desalination under concentrated solar flux and reduced pressure conditions*, Solar Energy 206 (2020) 983–996.
 
-- **Jeter, S. M.**  *Calculation of the concentrated flux density distribution in parabolic trough collectors by a semifinite formulation.*    Solar Energy 37(5) (1986) 335–345.
+- S. M. Jeter, *Calculation of the concentrated flux density distribution in parabolic trough collectors by a semifinite formulation*, Solar Energy 37 (5) (1986) 335–345.
